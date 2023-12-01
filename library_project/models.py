@@ -1,13 +1,12 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Boolean
 from sqlalchemy.orm import relationship
-from pydantic import BaseModel
 
 from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
 
 
-class Authors(Base):
+class Author(Base):
     __tablename__ = "authors"
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(124))
@@ -16,7 +15,7 @@ class Authors(Base):
     def __repr__(self):
         return self.__dict__
 
-class Books(Base):
+class Book(Base):
     __tablename__ = "books"
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(124))
@@ -35,7 +34,7 @@ class Books(Base):
 
 
 class BookHistory(Base):
-    tablename = "book_history"
+    __tablename__ = "book_history"
     id = Column(Integer, primary_key=True, index=True)
     book_id = Column(Integer, ForeignKey("books.id"))
     user_id = Column(Integer, ForeignKey("users.id"))
@@ -44,22 +43,29 @@ class BookHistory(Base):
     user = relationship("User", back_populates="books")
     book = relationship("Book", back_populates="history")
 
-def __repr__(self):
-        return self.__dict__
+    def __repr__(self):
+            return self.__dict__
 
-class Users(Base):
+# class User(Base):
+#     __tablename__ = "users"
+#     username = Column(String(124))
+#     email = Column(String(124))
+#     full_name = Column(String(124))
+#     books = relationship("BookHistory", back_populates="user")
+class User(Base):
     __tablename__ = "users"
+    id = Column(Integer, primary_key=True, autoincrement=True)
     username = Column(String(124))
-    email = Column(String(124))
-    full_name = Column(String(124))
+    email = Column(String(124), nullable=True)
+    full_name = Column(String(124), nullable=True)
+    disabled = Column(Boolean, default=False)
     books = relationship("BookHistory", back_populates="user")
-
 
     def __repr__(self):
         return self.__dict__
 
 class BookLocation(Base):
-    tablename = "book_locations"
+    __tablename__ = "book_locations"
     id = Column(Integer, primary_key=True, index=True)
     book_id = Column(Integer, ForeignKey("books.id"))
     location = Column(String)
@@ -70,26 +76,24 @@ class BookLocation(Base):
     def __repr__(self):
         return self.__dict__
 
+class Genre(Base):
+    __tablename__ = "genres"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String(124))
+    books = relationship("Book", back_populates="genre")
 
-class Book(BaseModel):
-    title: str
-    author: int
+    def __repr__(self):
+        return self.__dict__
 
-class Author(BaseModel):
-    id: int
-    name: str
+class Language(Base):
+    __tablename__ = "languages"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String(124))
+    books = relationship("Book", back_populates="language")
 
-class Genre(BaseModel):
-    name: str
+    def __repr__(self):
+        return self.__dict__
 
-class Language(BaseModel):
-    name: str
-
-class User(BaseModel):
-    username: str
-    email: str | None = None
-    full_name: str | None = None
-    disabled: bool | None = None
 
 class UserInDB(User):
     hashed_password: str
