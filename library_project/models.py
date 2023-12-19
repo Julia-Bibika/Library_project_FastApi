@@ -6,7 +6,7 @@ from sqlalchemy.orm import declarative_base
 Base = declarative_base()
 
 
-class Author(Base):
+class Authors(Base):
     __tablename__ = "authors"
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(124))
@@ -15,7 +15,7 @@ class Author(Base):
     def __repr__(self):
         return self.__dict__
 
-class Book(Base):
+class Books(Base):
     __tablename__ = "books"
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(124))
@@ -33,7 +33,7 @@ class Book(Base):
         return self.__dict__
 
 
-class BookHistory(Base):
+class BookHistorys(Base):
     __tablename__ = "book_history"
     id = Column(Integer, primary_key=True, index=True)
     book_id = Column(Integer, ForeignKey("books.id"))
@@ -52,7 +52,7 @@ class BookHistory(Base):
 #     email = Column(String(124))
 #     full_name = Column(String(124))
 #     books = relationship("BookHistory", back_populates="user")
-class User(Base):
+class Users(Base):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True, autoincrement=True)
     username = Column(String(124))
@@ -64,7 +64,7 @@ class User(Base):
     def __repr__(self):
         return self.__dict__
 
-class BookLocation(Base):
+class BookLocations(Base):
     __tablename__ = "book_locations"
     id = Column(Integer, primary_key=True, index=True)
     book_id = Column(Integer, ForeignKey("books.id"))
@@ -76,7 +76,7 @@ class BookLocation(Base):
     def __repr__(self):
         return self.__dict__
 
-class Genre(Base):
+class Genres(Base):
     __tablename__ = "genres"
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(124))
@@ -85,7 +85,7 @@ class Genre(Base):
     def __repr__(self):
         return self.__dict__
 
-class Language(Base):
+class Languages(Base):
     __tablename__ = "languages"
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(124))
@@ -94,6 +94,3 @@ class Language(Base):
     def __repr__(self):
         return self.__dict__
 
-
-class UserInDB(User):
-    hashed_password: str
